@@ -189,7 +189,7 @@
                 resetCirclePosition();
 
                 const power = 50;
-                const maxAngle = 80;
+                const maxAngle = 100;
                 const rotateSpeed = 0.4;
                 const movementSpeed = 2;
                 const gravity = 20;
@@ -197,6 +197,8 @@
                 let isAnimating = false;
                 let animationId;
                 let direction = 1;
+                let zero;
+                let isPowering = false;
                 let floorY = calculateFloorY();
 
                 function calculateFloorY() {
@@ -205,9 +207,10 @@
                 }
 
                 function startPowering() {
-                    if (isAnimating) {
+                    if (isPowering || isAnimating) {
                         return;
                     }
+                    isPowering = true;
                     resetCirclePosition();
                     isAnimating = true;
                     animationId =
@@ -215,9 +218,10 @@
                 }
 
                 function endPowering() {
-                    if (!isAnimating) {
+                    if (!isAnimating || !isPowering) {
                         return;
                     }
+                    isPowering = false;
                     window.cancelAnimationFrame(animationId);
                     control.style.transform = `rotate(${0}deg)`;
                     requestAnimationFrame(launchCircle);
@@ -245,7 +249,6 @@
                     circle.updatePosition(x, y);
                 }
 
-                let zero;
                 function launchCircle(t) {
                     zero = t;
                     animationid = window.requestAnimationFrame((t) => {
